@@ -2,7 +2,7 @@
   "name": "websocket-example",
   "version": "1.0.0",
   "description": "The experience' of using WebSocket.io within tutorial Web - Connect the Web With WebSockets (TutsPlus)",
-  "main": "index.js",
+  "main": "server/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
