@@ -14,7 +14,7 @@ app.use(express.static('app'));
  });
  */
 
-var messages = [{
+var listOfMessages = [{
     userId: 1,
     messageId: 10,
     userName: "Asha Greyjoy",
@@ -49,7 +49,18 @@ var messages = [{
 
 io.on('connection', function (socket) {
     // console.log('Somthing connected to Socket.io');
-    socket.emit("messages", messages);
+    socket.emit("messages", listOfMessages);
+
+    socket.on('new-message', function (data) {
+        /*console.log('new-message username : ' + data.userName
+        + " content : " + data.content.link
+        + " text : " + data.content.text);*/
+        listOfMessages.push(data);
+        // this line just emit for connected socket client
+        //socket.emit("messages", listOfMessages);
+        // this line just emit for all client those connected
+        io.sockets.emit("messages", listOfMessages);
+    });
 });
 
 server.listen(8080, function () {

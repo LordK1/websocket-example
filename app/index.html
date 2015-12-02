@@ -7,7 +7,22 @@
 </head>
 
 <body>
-    <h1>My App</h1>
-    <hr>
-    <div id="messages"></div>
+<h1>My App</h1>
+<hr>
+<div id="messages"></div>
+<hr>
+<form class="" onsubmit="return addMessage(this);">
+    <!--<button type="submit" name="button">Add a new message</button>-->
+    <div class="username">
+        <input type="text" id="username" placeholder="Your Name" value="Guest" required="">
+    </div>
+    <div class="link">
+        <input type="text" id="linkAddress" placeholder="Link" required="">
+    </div>
+    <div class="message-input">
+        <textarea type="text" id="message" placeholder="Enter a Message" required="" value=""></textarea>
+    </div>
+    <input class="sendMessage" type="submit" name="submit" value="Send !">
+</form>
 </body>
+
