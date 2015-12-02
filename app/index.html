@@ -4,14 +4,17 @@
     <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
     <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="main.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,300italic' rel='stylesheet'
+          type='text/css'>
+    <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
 <body>
-<h1>My App</h1>
+<h1>Latest Messages :</h1>
 <hr>
 <div id="messages"></div>
 <hr>
-<form class="" onsubmit="return addMessage(this);">
+<form class="new-message form-control" onsubmit="return addMessage(this);">
     <!--<button type="submit" name="button">Add a new message</button>-->
     <div class="username">
         <input type="text" id="username" placeholder="Your Name" value="Guest" required="">
@@ -22,7 +25,7 @@
     <div class="message-input">
         <textarea type="text" id="message" placeholder="Enter a Message" required="" value=""></textarea>
     </div>
-    <input class="sendMessage" type="submit" name="submit" value="Send !">
+    <input class="sendMessageButton" type="submit" name="submit" value="Send !">
 </form>
 </body>
 

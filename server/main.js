@@ -53,12 +53,22 @@ io.on('connection', function (socket) {
 
     socket.on('new-message', function (data) {
         /*console.log('new-message username : ' + data.userName
-        + " content : " + data.content.link
-        + " text : " + data.content.text);*/
+         + " content : " + data.content.link
+         + " text : " + data.content.text);*/
         listOfMessages.push(data);
         // this line just emit for connected socket client
         //socket.emit("messages", listOfMessages);
         // this line just emit for all client those connected
+        io.sockets.emit("messages", listOfMessages);
+    });
+
+    socket.on("update-message", function (data) {
+        //console.info("update-message : "+data);
+        var message = listOfMessages.filter(function (message) {
+            return message.messageId == data.messageId;
+        })[0];
+
+        message.likedBy = data.likedBy;
         io.sockets.emit("messages", listOfMessages);
     });
 });
