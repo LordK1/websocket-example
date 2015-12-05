@@ -7,7 +7,7 @@ function randomId() {
     return Math.floor(Math.random() * 1e11);
 }
 
-var socket = io.connect('http://localhost:8080', {
+var socket = io.connect('http://0.0.0.0:3000', {
     'forceNew': true
 });
 

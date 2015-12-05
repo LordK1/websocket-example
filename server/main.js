@@ -1,7 +1,13 @@
 var express = require('express');
 var app = express();
+
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var port = process.env.PORT || 3000;
+
+server.listen(port, function () {
+    console.log('Server is running on http://0.0.0.0:%s', port);
+});
 
 // serve statics as express statics
 app.use('/bower_components', express.static('bower_components'));
@@ -46,11 +52,17 @@ var listOfMessages = [{
     ts: Date.now() - 1000000
 }];
 
+// ChatRoom
+
+// username which are currently connected to the chat
+var usernames = {};
+var numUsers = 0;
+
 
 io.on('connection', function (socket) {
     // console.log('Somthing connected to Socket.io');
     socket.emit("messages", listOfMessages);
-
+    var addedUser = false;
     socket.on('new-message', function (data) {
         /*console.log('new-message username : ' + data.userName
          + " content : " + data.content.link
@@ -71,11 +83,59 @@ io.on('connection', function (socket) {
         message.likedBy = data.likedBy;
         io.sockets.emit("messages", listOfMessages);
     });
+
+    // when the client emits 'new message', this listens and executes
+    socket.on('chat-new-message', function (data) {
+        //    tell the client to executed 'new message'
+        console.log('News Message : '+data);
+        socket.broadcast.emit('chat-new-message', {
+            username: socket.username,
+            message: data
+        });
+    });
+
+    // when the client emits 'chat-add-user', this listens and executes
+    socket.on('chat-add-user', function (username) {
+        //    store the username in the socket session for this client
+        socket.username = username;
+        //    add the client's username to the global list
+        username[username] = username;
+        ++numUsers;
+        addedUser = true;
+        socket.emit('chat-login', {numUsers: numUsers});
+        //    echo globally (all clients) that a person has connected
+        socket.broadcast.emit('cha-user-joined', {
+            username: socket.username,
+            numUsers: numUsers
+        });
+    });
+    // when the clients emits 'typing', we broadcast it to others
+    socket.on('chat-typing', function () {
+        socket.broadcast.emit('typing', {
+            username: socket.username
+        });
+    });
+
+    // when the client emits 'stop typing', we broadcast it to others
+    socket.on('chat-stop-typing', function () {
+        socket.broadcast.emit('chat-stop-typing', {
+            username: socket.username
+        });
+    });
+
+    // when the user disconnects.perform this
+    socket.on('disconnect', function () {
+        //    remove the username from global username list
+        if (addedUser) {
+            delete usernames[socket.username];
+            --numUsers;
+        }
+        // echo globally tha this user left
+        socket.broadcast.emit('user left', {
+            username: socket.username,
+            numUsers: numUsers
+        });
+    });
 });
 
-server.listen(8080, function () {
-    var host = server.address().address;
-    var port = server.address().port;
 
-    console.log('Server is running on http://0.0.0.0:%s', port);
-});
