@@ -9,7 +9,7 @@ var listOfMessages = [];
 socket.on("chat-update-messages", function (data) {
     //console.info("chat-update-messages", data);
     listOfMessages.push(data);
-    alert(data.username + " message : " + data.message);
+    //alert(data.username + " message : " + data.message);
     render();
 });
 
