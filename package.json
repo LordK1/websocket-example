@@ -4,6 +4,7 @@
   "description": "The experience' of using WebSocket.io within tutorial Web - Connect the Web With WebSockets (TutsPlus)",
   "main": "index.js",
   "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
