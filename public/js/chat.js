@@ -1,7 +1,7 @@
 /**
  * Created by k1 on 12/6/15.
  */
-var socket = io.connect('http://0.0.0.0:3000', {
+var socket = io.connect(window.location.hostname, {
     'forceNew': true
 });
 
