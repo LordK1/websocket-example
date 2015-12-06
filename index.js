@@ -1,4 +1,5 @@
 var express = require('express');
+var path = require('path');
 var app = express();
 
 var server = require('http').Server(app);
@@ -11,14 +12,21 @@ server.listen(port, function () {
 
 // serve statics as express statics
 app.use('/bower_components', express.static('bower_components'));
+app.use('/static', express.static('public'));
 app.use(express.static('app'));
+app.use(express.static('chat'));
 
-/*
- app.get('/',function (req , res) {
- res.send("Hello Express and Socket.io World !!!");
- console.log("Somthing connected to Express !!!");
- });
- */
+
+// viewed at http://localhost:8080
+app.get('/', function (req, res) {
+    //res.sendFile('/app/index.html');
+    res.sendFile('/chat/chat.html');
+});
+
+app.get('/chat', function (req, res) {
+    res.sendFile('/chat/chat.html');
+
+});
 
 var listOfMessages = [{
     userId: 1,
@@ -85,13 +93,10 @@ io.on('connection', function (socket) {
     });
 
     // when the client emits 'new message', this listens and executes
-    socket.on('chat-new-message', function (data) {
+    socket.on('chat-send-message', function (data) {
         //    tell the client to executed 'new message'
-        console.log('News Message : '+data);
-        socket.broadcast.emit('chat-new-message', {
-            username: socket.username,
-            message: data
-        });
+        console.log('chat-send-message : ', data);
+        io.sockets.emit('chat-update-messages',data);
     });
 
     // when the client emits 'chat-add-user', this listens and executes

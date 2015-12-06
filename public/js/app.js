@@ -1,6 +1,6 @@
 var userId = localStorage.getItem("userId") || randomId();
 localStorage.setItem("userId", userId);
-console.info("Hi i'm user #" + userId);
+//console.info("Hi i'm user #" + userId);
 var messageCache;
 
 function randomId() {
@@ -12,10 +12,11 @@ var socket = io.connect('http://0.0.0.0:3000', {
 });
 
 socket.on("messages", function (data) {
-    console.info(data);
+    //console.info(data);
     messageCache = data;
     render();
 });
+
 
 function render() {
     var data = messageCache;

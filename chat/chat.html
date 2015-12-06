@@ -1,43 +1,42 @@
-<head>
+<!DOCTYPE html>
+<html>
+<head lang="en">
     <meta charset="UTF-8">
-    <title>Chatter - Main</title>
+    <title>Chatter - Chat</title>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
     <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="static/js/app.js"></script>
+    <script type="text/javascript" src="static/js/chat.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,300italic' rel='stylesheet'
           type='text/css'>
     <link rel="stylesheet" type="text/css" href="static/css/main.css">
 </head>
-
 <body>
 <h1>Chatter Socket.io</h1>
 
 <p>
-    This is sample of PubSub - Publisher/Subscriber protocol, open up this page with other browser or tab to see what
-    happen here !!! <br><br>
-    And Now For chat with android client side application (You can download it <a href="">here</a> ) go to <a
-        href="/chat.html">
-    here </a> !!!
+    This is sample of WAMP - Web Application Messaging protocol, download client side android application from <a
+        href=""> here </a> and fire up
+    chatting :") <br><br>
+    Go back to <a href="/">PubSub </a> !!!
 </p>
 
 <h3>Latest Messages :</h3>
 <hr>
-<div id="messages"></div>
+<div id="messages">
+
+</div>
 <hr>
-<form class="new-message form-control" onsubmit="return addMessage(this);">
-    <!--<button type="submit" name="button">Add a new message</button>-->
+<form class="new-message form-control" onsubmit="return chatSendNewMessage(this);">
     <div class="username">
         <input type="text" id="username" placeholder="Your Name" value="Guest" required="">
-    </div>
-    <div class="link">
-        <input type="text" id="linkAddress" placeholder="Link" required="">
     </div>
     <div class="message-input">
         <textarea type="text" id="message" placeholder="Enter a Message" required="" value=""></textarea>
     </div>
     <input class="sendMessageButton" type="submit" name="submit" value="Send !">
+
 </form>
 </body>
-
+</html>
