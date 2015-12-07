@@ -4,10 +4,10 @@ var app = express();
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
+app.set('port', (process.env.PORT || 3000));
 
-server.listen(port, function () {
-    console.log('Server is running on http://0.0.0.0:%s', port);
+server.listen(app.get('port'), function () {
+    console.log('Server is running on http://0.0.0.0:%d', app.get('port'));
 });
 
 // serve statics as express statics
@@ -17,7 +17,9 @@ app.use(express.static('app'));
 app.use(express.static('chat'));
 
 
-// viewed at http://localhost:8080
+/**
+ * App routes.
+ */
 app.get('/', function (req, res) {
     //res.sendFile('/app/index.html');
     res.sendFile('/chat/chat.html');
@@ -28,6 +30,10 @@ app.get('/chat', function (req, res) {
 
 });
 
+
+/**
+ * App Socket statics
+ */
 var listOfMessages = [{
     userId: 1,
     messageId: 10,
@@ -60,15 +66,17 @@ var listOfMessages = [{
     ts: Date.now() - 1000000
 }];
 
-// ChatRoom
 
 // username which are currently connected to the chat
 var usernames = {};
 var numUsers = 0;
 
-
+/**
+ * Socket.IO server (single process only)
+ */
 io.on('connection', function (socket) {
-    // console.log('Somthing connected to Socket.io');
+    //var address = socket.handshake.address;
+    //console.log('New Connection from : ' + address.address + ' port : ' + address.port);
     socket.emit("messages", listOfMessages);
     var addedUser = false;
     socket.on('new-message', function (data) {
@@ -95,8 +103,8 @@ io.on('connection', function (socket) {
     // when the client emits 'new message', this listens and executes
     socket.on('chat-send-message', function (data) {
         //    tell the client to executed 'new message'
-        console.log('chat-send-message : ', data);
-        io.sockets.emit('chat-update-messages',data);
+        //console.log('chat-send-message : ', data);
+        io.sockets.emit('chat-update-messages', data);
     });
 
     // when the client emits 'chat-add-user', this listens and executes

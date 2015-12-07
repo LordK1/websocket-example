@@ -1,5 +1,5 @@
 * {
-    font-family: "Source Sans Pro";
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -50,6 +50,14 @@ textarea {
     width: 12em;
 }
 
+.message-item {
+    margin: 10px 0px;
+}
+
+.message-item p {
+    margin: auto;
+}
+
 .message {
     margin: 2em 0;
 }
@@ -57,3 +65,16 @@ textarea {
 .messages {
     margin-bottom: 1em;
 }
+
+.title {
+    font: 800 56px/1.2 'Fredericka the Great', cursive;
+}
+
+.content-link {
+    font: 400 14px/1.0 'Roboto', sans-serif;
+}
+
+.content {
+    font: 400 24px/1.0 'Roboto', sans-serif;
+}
+

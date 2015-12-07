@@ -1,3 +1,6 @@
+/**
+ * Created by k1 on 12/6/15.
+ */
 var userId = localStorage.getItem("userId") || randomId();
 localStorage.setItem("userId", userId);
 //console.info("Hi i'm user #" + userId);
@@ -7,12 +10,11 @@ function randomId() {
     return Math.floor(Math.random() * 1e11);
 }
 
-var socket = io.connect(window.location.hostname, {
+var socket = io.connect({
     'forceNew': true
 });
 
 socket.on("messages", function (data) {
-    //console.info(data);
     messageCache = data;
     render();
 });
@@ -28,7 +30,7 @@ function render() {
         + '<div class="name">'
         + data.userName
         + '</div>'
-        + '<a class="message" href=' + data.content.link + ' target=blank>'
+        + '<a class="content-link" href=' + data.content.link + ' target=blank>'
         + data.content.text
         + '</a>'
         + '<div class="time"><span class="glyphicon-time"></span>'

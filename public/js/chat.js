@@ -1,15 +1,14 @@
 /**
  * Created by k1 on 12/6/15.
  */
-var socket = io.connect(window.location.hostname, {
-    'forceNew': true
-});
+var socket = io.connect(window.location.hostname + ":" + window.location.port, {
+        'forceNew': true
+    }
+);
 
 var listOfMessages = [];
 socket.on("chat-update-messages", function (data) {
-    //console.info("chat-update-messages", data);
     listOfMessages.push(data);
-    //alert(data.username + " message : " + data.message);
     render();
 });
 
@@ -17,18 +16,18 @@ socket.on("chat-update-messages", function (data) {
 function render() {
     var html = listOfMessages.map(function (data) {
         return (
-        +'<div class="name">'
-        + data.username
-        + ' says : </div>'
-        + '<p>'
-        + data.message
-        + '</p>'
-        + '<div class="time"><span class="glyphicon-time"></span>'
-        + moment(data.ts).fromNow()
-        + '</div>'
-        )
-    }).join("");
+            '<div class="message-item">' + '<div class="name">'
+            + data.username
+            + '</div>'
+            + '<p >'
+            + data.message
+            + '</p>'
+            + '<div class="time"><span class="glyphicon-time"></span>'
+            + moment(data.ts).fromNow()
+            + '</div>'
 
+        )
+    }).join("\n");
     document.getElementById("messages").innerHTML = html;
 }
 
