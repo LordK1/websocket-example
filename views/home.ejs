@@ -1,0 +1,69 @@
+<!-- views/home.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <% include partials/header %>
+    <script type="text/javascript" src="static/js/app.js"></script>
+</head>
+<body class="container">
+<header>
+    <% include partials/navbar.ejs %>
+</header>
+<main>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="jumbotron">
+                <h1 class="title">Home Socket.io</h1>
+
+                <p class="content">
+                    This is sample of PubSub - Publisher/Subscriber protocol, open up this page with other browser or
+                    tab to see
+                    what
+                    happen here !!! <br><br>
+                    And Now For chat with android client side application (You can download it <a
+                            href="https://github.com/LordK1/SocketChatApplication/blob/master/app/app-release.apk?raw=true">here</a>
+                    ) go to
+                    <a
+                            href="/chat.html">
+                        here </a> !!!
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="well">
+                <%= tagline %>
+                <ul>
+                    <% drinks.forEach(function (drink) { %>
+                    <li><%= drink.name %> - <%= drink.drunkness %> </li>
+                    <% }); %>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <h3>Latest Messages :</h3>
+        <hr>
+        <div id="messages"></div>
+        <hr>
+        <form class="new-message form-control" onsubmit="return addMessage(this);">
+            <!--<button type="submit" name="button">Add a new message</button>-->
+            <div class="username">
+                <input type="text" id="username" placeholder="Your Name" value="Guest" required="">
+            </div>
+            <div class="link">
+                <input type="text" id="linkAddress" placeholder="Link" required="">
+            </div>
+            <div class="message-input">
+                <textarea type="text" id="message" placeholder="Enter a Message" required="" value=""></textarea>
+            </div>
+            <input class="sendMessageButton" type="submit" name="submit" value="Send !">
+        </form>
+    </div>
+</main>
+<footer>
+    <% include partials/footer.ejs %>
+</footer>
+
+</body>
+</html>

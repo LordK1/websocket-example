@@ -13,23 +13,20 @@ server.listen(app.get('port'), function () {
 // serve statics as express statics
 app.use('/bower_components', express.static('bower_components'));
 app.use('/static', express.static('public'));
-app.use(express.static('app'));
-app.use(express.static('chat'));
-
 
 /**
- * App routes.
+ * View and Template Engine
  */
-app.get('/', function (req, res) {
-    //res.sendFile('/app/index.html');
-    res.sendFile('/chat/chat.html');
-});
+// view engine setup
+app.set('views', 'views');
+// set the view engine to ejs
+app.set('view engine', 'ejs');
 
-app.get('/chat', function (req, res) {
-    res.sendFile('/chat/chat.html');
-
-});
-
+/**
+ * App Routes
+ * */
+var routes = require('./routes/index');
+app.use('/', routes);
 
 /**
  * App Socket statics
