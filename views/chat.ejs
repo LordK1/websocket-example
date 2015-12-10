@@ -36,24 +36,28 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-8 col-md-12">
-            <h3>Latest Messages :</h3>
-            <hr>
-            <div id="messages">
+        <div class="col-md-12">
+            <div class="col-md-8">
+                <h3>Latest Messages :</h3>
+                <hr>
+                <div id="messages">
 
+                </div>
             </div>
+            <div class="col-md-4">
+                <form onsubmit="return chatSendNewMessage(this);">
 
-            <hr>
-            <form class="new-message form-control" onsubmit="return chatSendNewMessage(this);">
-                <div class="username">
-                    <input type="text" id="username" placeholder="Your User Name" value="Guest" required="">
-                </div>
-                <div class="message-input">
-                    <textarea type="text" id="message" placeholder="Enter a Message" required="" value=""></textarea>
-                </div>
-                <input class="sendMessageButton" type="submit" name="submit" value="Send !">
+                    <div class="username">
+                        <input type="text" id="username" placeholder="Your User Name" value="Guest" required="">
+                    </div>
+                    <div class="message-input">
+                        <textarea type="text" id="message" placeholder="Enter a Message" required=""
+                                  value=""></textarea>
+                    </div>
+                    <input class="sendMessageButton" type="submit" name="submit" value="Send !">
 
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </main>

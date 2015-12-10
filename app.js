@@ -1,10 +1,19 @@
+require('./model/db');
 var express = require('express');
 var path = require('path');
-var app = express();
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var flash = require('connect-flash');
 
+var app = express();
+app.set('port', (process.env.PORT || 3000));
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-app.set('port', (process.env.PORT || 3000));
+
 
 server.listen(app.get('port'), function () {
     console.log('Server is running on http://0.0.0.0:%d', app.get('port'));
@@ -21,12 +30,34 @@ app.use('/static', express.static('public'));
 app.set('views', 'views');
 // set the view engine to ejs
 app.set('view engine', 'ejs');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
+app.use(logger('dev'));
+app.use(flash());
+app.use(require('express-session')({
+    secret: 'socketerapplication',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// passport config
+var User = require('./model/user');
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 /**
  * App Routes
  * */
 var routes = require('./routes/index');
 app.use('/', routes);
+var auth = require('./routes/auth');
+app.use('/', auth);
+var api = require('./routes/api');
+app.use('/', api);
 
 /**
  * App Socket statics
@@ -71,15 +102,15 @@ var numUsers = 0;
 /**
  * Socket.IO server (single process only)
  */
-io.on('connection', function (socket) {
+/*io.on('connection', function (socket) {
     //var address = socket.handshake.address;
     //console.log('New Connection from : ' + address.address + ' port : ' + address.port);
     socket.emit("messages", listOfMessages);
     var addedUser = false;
     socket.on('new-message', function (data) {
-        /*console.log('new-message username : ' + data.userName
+        *//*console.log('new-message username : ' + data.userName
          + " content : " + data.content.link
-         + " text : " + data.content.text);*/
+         + " text : " + data.content.text);*//*
         listOfMessages.push(data);
         // this line just emit for connected socket client
         //socket.emit("messages", listOfMessages);
@@ -146,6 +177,6 @@ io.on('connection', function (socket) {
             numUsers: numUsers
         });
     });
-});
+});*/
 
 

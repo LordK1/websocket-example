@@ -18,6 +18,7 @@ router.get('/', function (req, res) {
     var tagline = "Any Code of your own that you haven't looked at for six or more months might as well have been written by someone else !!! "
     res.render('home', {
         title: 'Home',
+        user: req.user,
         drinks: drinks,
         tagline: tagline
     });
@@ -26,7 +27,8 @@ router.get('/', function (req, res) {
 // Chat page
 router.get('/chat', function (req, res) {
     res.render('chat', {
-        title: 'Chat'
+        title: 'Chat',
+        user: req.user
     });
 });
 

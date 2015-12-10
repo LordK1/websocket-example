@@ -1,0 +1,45 @@
+<!-- views/pages/index.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <% include partials/header %>
+</head>
+
+<body class="container">
+<header>
+    <% include partials/navbar.ejs %>
+</header>
+<main>
+    <div class="row">
+        <div class="col-md-12">
+            <% if (info) { %>
+            <b style="color: red;"><%= info %> or <a href="/login">Login</a></b>
+            <% }; %>
+            <form action="/register" method="post">
+                <fieldset class="form-group">
+                    <label for="username">Username : </label>
+                    <input type="text" class="form-control" id="username" name="username">
+                    <small class="text-muted">Enter your Username here.</small>
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="password">Password : </label>
+                    <input type="password" class="form-control" id="password" name="password">
+                    <small class="text-muted">Enter your Password here.</small>
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="password02">Confirm Password : </label>
+                    <input type="password" class="form-control" id="password02" name="password02">
+                    <small class="text-muted">Confirm your Password here.</small>
+                </fieldset>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</main>
+<footer>
+    <% include partials/footer.ejs %>
+</footer>
+
+</body>
+</html>

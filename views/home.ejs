@@ -41,24 +41,32 @@
         </div>
     </div>
     <div class="row">
-
-        <h3>Latest Messages :</h3>
-        <hr>
-        <div id="messages"></div>
-        <hr>
-        <form class="new-message form-control" onsubmit="return addMessage(this);">
-            <!--<button type="submit" name="button">Add a new message</button>-->
-            <div class="username">
-                <input type="text" id="username" placeholder="Your Name" value="Guest" required="">
+        <div class="col-md-12">
+            <h3>Latest Messages :</h3>
+            <hr>
+            <div class="col-md-8" id="messages"></div>
+            <hr>
+            <div class="col-md-4">
+                <form onsubmit="return addMessage(this);">
+                    <fieldset class="form-group">
+                        <label for="username">Username : </label>
+                        <input type="text" class="form-control" id="username" value="Guest" name="username">
+                        <small class="text-muted">Enter your Username here.</small>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <label for="link">Username : </label>
+                        <input type="text" class="form-control" id="link" name="link">
+                        <small class="text-muted">Enter your message link here.</small>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <label for="content">Message : </label>
+                        <textarea class="form-control" id="content" name="content" rows="4"></textarea>
+                        <small class="text-muted">Enter your message content here.</small>
+                    </fieldset>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
             </div>
-            <div class="link">
-                <input type="text" id="linkAddress" placeholder="Link" required="">
-            </div>
-            <div class="message-input">
-                <textarea type="text" id="message" placeholder="Enter a Message" required="" value=""></textarea>
-            </div>
-            <input class="sendMessageButton" type="submit" name="submit" value="Send !">
-        </form>
+        </div>
     </div>
 </main>
 <footer>
