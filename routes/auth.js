@@ -6,21 +6,30 @@ var router = express.Router();
 var passport = require('passport');
 var User = require('../model/user');
 
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+//    if user is authenticated in the session, carry on
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    //if they aren't redirect them to the home page
+    res.redirect('/');
+}
+
 router.get('/register', function (req, res) {
     res.render('register', {
         title: "Registration Page",
-        info: req.flash('info'),
-        user: req.user
+        message: req.flash('signupMessage')
     });
 });
 
 router.post('/register', function (req, res) {
     User.register(new User({username: req.body.username}), req.body.password, function (err, User) {
         if (err) {
-            req.flash('info', "Sorry. That username already exists. Try again.");
+            req.flash('signupMessage', 'That email is already taken.');
+
             return res.render('register', {
                 User: User,
-                user: req.user,
                 title: "Registration Page"
             });
         }
@@ -31,7 +40,7 @@ router.post('/register', function (req, res) {
 });
 
 router.get('/login', function (req, res) {
-    res.render('login', {user: req.user, title: "LOGIN", info: req.flash('info')});
+    res.render('login', {title: "LOGIN", message: req.flash('loginMessage')});
 });
 
 router.post('/login', passport.authenticate('local', {
@@ -41,6 +50,11 @@ router.post('/login', passport.authenticate('local', {
     successFlash: "Login Successful ! "
 }), function (req, res) {
     res.redirect('/');
+});
+
+
+router.get('/profile', isLoggedIn, function (req, res) {
+    res.render('profile');
 });
 
 router.get('/logout', function (req, res) {

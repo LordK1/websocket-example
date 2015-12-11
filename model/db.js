@@ -4,10 +4,12 @@
 var mongoose = require('mongoose');
 var User = require('./user');
 var Message = require('./message');
+var Post = require('./post');
+var config = require('../config');
 
-const dbUrl = 'mongodb://localhost/chattr-db';
+//const dbUrl = 'mongodb://localhost/chattr-db';
 
-mongoose.connect(dbUrl, function (err) {
+mongoose.connect(config.url, function (err) {
     if (err) {
         console.log('Mongoose Error : ', err);
     } else {

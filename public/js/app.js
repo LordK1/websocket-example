@@ -1,9 +1,6 @@
 /**
  * Created by k1 on 12/6/15.
  */
-var userId = localStorage.getItem("userId") || randomId();
-localStorage.setItem("userId", userId);
-//console.info("Hi i'm user #" + userId);
 var messageCache;
 
 function randomId() {
@@ -12,6 +9,9 @@ function randomId() {
 
 var socket = io.connect({
     'forceNew': true
+});
+socket.on('test', function (data) {
+    console.log(data);
 });
 
 socket.on("messages", function (data) {
@@ -58,18 +58,16 @@ function likeMessage(message) {
     return false;
 }
 
-function addMessage(e) {
-    var payload =
-    {
-        userName: document.getElementById("username").value,
-        content: {
-            text: document.getElementById("message").value,
-            link: document.getElementById("linkAddress").value
-
-        },
-        likedBy: [],
-        ts: Date.now()
+function createPost(e) {
+    if (user) {
+        var receivedPost =
+        {
+            link: document.getElementsByName("link").value,
+            content: document.getElementById("content").value,
+            likeCount: 0
+        }
+        socket.emit("new-message", payload);
+        return false;
     }
-    socket.emit("new-message", payload);
-    return false;
+
 }

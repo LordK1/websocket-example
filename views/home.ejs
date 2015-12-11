@@ -3,6 +3,11 @@
 <html>
 <head>
     <% include partials/header %>
+    <script type="text/javascript">
+        var user;
+        user = <%= JSON.stringify(user) %>;
+        console.log(user);
+    </script>
     <script type="text/javascript" src="static/js/app.js"></script>
 </head>
 <body class="container">
@@ -31,38 +36,35 @@
         </div>
         <div class="col-md-4">
             <div class="well">
-                <%= tagline %>
-                <ul>
-                    <% drinks.forEach(function (drink) { %>
-                    <li><%= drink.name %> - <%= drink.drunkness %> </li>
-                    <% }); %>
-                </ul>
+                <% if (user) { %>
+                <div class="alert alert-success">Welcome to home <%= user.username %></div>
+                <% } else { %>
+                <div class="alert alert-info">You must Login or Register first !!</div>
+                <% } %>
+
             </div>
         </div>
     </div>
     <div class="row">
         <div class="panel col-md-12">
-            <h3>Latest Messages :</h3>
+            <h3>Latest Posts :</h3>
 
             <div class="col-md-8" id="messages"></div>
             <div class="col-md-4">
-                <form onsubmit="return addMessage(this);">
-                    <fieldset class="form-group">
-                        <label for="username">Username : </label>
-                        <input type="text" class="form-control" id="username" value="Guest" name="username">
-                        <small class="text-muted">Enter your Username here.</small>
-                    </fieldset>
+                <form onsubmit="return false;">
                     <fieldset class="form-group">
                         <label for="link">Link : </label>
                         <input type="text" class="form-control" id="link" name="link">
-                        <small class="text-muted">Enter your message link here.</small>
+                        <small class="text-muted">Enter your Post link here.</small>
                     </fieldset>
                     <fieldset class="form-group">
-                        <label for="content">Message : </label>
+                        <label for="content">Content : </label>
                         <textarea class="form-control" id="content" name="content" rows="4"></textarea>
-                        <small class="text-muted">Enter your message content here.</small>
+                        <small class="text-muted">Enter your post content here.</small>
                     </fieldset>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" onclick="return createPost(this);" onsubmit="return createPost(this);"
+                            class="btn btn-primary">Submit
+                    </button>
                 </form>
             </div>
         </div>

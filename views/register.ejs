@@ -12,9 +12,9 @@
 <main>
     <div class="row">
         <div class="col-md-12">
-            <% if (info) { %>
-            <b style="color: red;"><%= info %> or <a href="/login">Login</a></b>
-            <% }; %>
+            <% if (message.length > 0) { %>
+            <div class="alert alert-danger"><%= message %></div>
+            <% } %>
             <form action="/register" method="post">
                 <fieldset class="form-group">
                     <label for="username">Username : </label>
