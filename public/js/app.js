@@ -11,7 +11,7 @@ var socket = io.connect({
     'forceNew': true
 });
 socket.on('test', function (data) {
-    console.log(data);
+    console.log(data + " session : " + socket.toString());
 });
 
 socket.on("messages", function (data) {

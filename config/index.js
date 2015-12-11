@@ -3,6 +3,7 @@
  */
 
 module.exports = {
-    'url': 'mongodb://localhost/chattr-db', // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
-    'sessionSecret': 'chattr-socketter'
+    "DB_URL": 'mongodb://localhost/chattr-db', // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
+    "COOKIE_SECRET": 'chattr-socketter',
+    "COOKIE_NAME": 'connect.sid'
 }

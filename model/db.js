@@ -9,7 +9,7 @@ var config = require('../config');
 
 //const dbUrl = 'mongodb://localhost/chattr-db';
 
-mongoose.connect(config.url, function (err) {
+mongoose.connect(config.DB_URL, function (err) {
     if (err) {
         console.log('Mongoose Error : ', err);
     } else {

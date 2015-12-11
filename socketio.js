@@ -4,33 +4,23 @@
  */
 var config = require('./config');
 var cookieParser = require('cookie-parser');
-var passport = require('passport');
+var passportSocketIo = require('passport.socketio');
 
 // username which are currently connected to the chat
 var numUsers = 0;
 
-module.exports = function (server, io, mongoStore) {
-    /*io.use(function (socket, next) {
-        cookieParser(config.sessionSecret)(socket.request), {}, function (err) {
-            var sessionId = socket.request.signedCookies['connection.sig'];
-            mongoStore.get(sessionId, function (err, session) {
-                socket.request.session = session;
-                passport.initialize()(socket.request, {}, function () {
-                    passport.session()(socket.request, {}, function () {
-                        if (socket.request.user) {
-                            next(null, true);
-                        } else {
-                            next(new Error('User is not authenticated :@'), false);
-                        }
-                    });
-                });
-            });
-        }
-    });*/
+
+module.exports = function (server, io, sessionMiddleware) {
+
+    io.use(function (socket, next) {
+        sessionMiddleware(socket.request, {}, next);
+    })
 
     io.on('connection', function (socket) {
+        var userId = socket.request.session.passport.user;
+        console.log("Connection for userId : ", userId);
         //var address = socket.handshake.address;
-        console.log('Socket.io Connected :P');
+        console.log(socket.request.method, socket.request.DB_URL,socket.request.headers.cookie);
         socket.emit("test", "Helllo this is test !!!");
         var addedUser = false;
         socket.on('new-message', function (data) {

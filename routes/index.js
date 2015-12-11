@@ -5,7 +5,7 @@ var express = require('express');
 var router = express.Router();
 
 router.use(function (req, res, next) {
-    console.log(req.method, req.url);
+    console.log(req.method, req.DB_URL,req.session.passport.user);
     res.locals.user = req.user;
     next();
 });
