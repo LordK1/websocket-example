@@ -6,7 +6,7 @@ body {
     color: #111111;
     background-color: #FFFFFF;
     font-size: 1.2em;
-    margin: 3em;
+    margin: 1em;
 }
 
 .time {
@@ -24,12 +24,12 @@ a {
     text-decoration: none;
 }
 
-input[type=text] {
+/*input[type=text] {
     padding: 0.5em;
     font-size: 0.8em;
     width: 22em;
     margin: 2em 0;
-}
+}*/
 
 textarea {
     padding: 0.25em;

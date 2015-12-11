@@ -19,7 +19,7 @@ router.get('/messages', function (req, res) {
     });
 });
 
-router.get('/comments/:userId', function (req, res) {
+router.get('/messages/:userId', function (req, res) {
     Message.find({user_id: req.params.userId}, function (err, comments) {
         Message.populate(comments, {path: 'user_id'}, function (err, comments) {
             res.send(comments);
