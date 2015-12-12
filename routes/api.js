@@ -11,7 +11,7 @@ var passport = require('passport');
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated())return next();
-    res.send(401);
+    res.sendStatus(401);
 }
 
 
@@ -51,31 +51,42 @@ router.get('/posts/:userId', function (req, res) {
     });
 });
 
-router.post('/auth/login', passport.authenticate('local'), function (req, res) {
+router.post('/login', passport.authenticate('local'), function (req, res) {
+    console.log(req);
+    res.json(req.user, {'message': "login successfully !!!"});
+});
+
+router.get('/currentuser', isAuthenticated, function (req, res) {
     res.json(req.user);
 });
 
-router.get('/auth/currentuser', isAuthenticated, function (req, res) {
-    res.json(req.user);
-});
+router.post('/register', function (req, res) {
 
-router.post('/auth/register', function (req, res) {
+    /*var user = new User();
+     user.username = req.body.username;
+     user.password = req.body.password;
 
-    var user = new User();
-    user.username = req.body.username;
-    user.password = req.body.password;
+     user.save(function (err) {
+     if (err) {
+     res.json({'message': 'Registration error'});
+     } else {
+     res.json(req.user, {'message': 'Registration success'});
+     }
+     });*/
 
-    user.save(function (err) {
+    User.register(new User({username: req.body.username}), req.body.password, function (err, user) {
         if (err) {
-            res.json({'alert': 'Registration error'});
-        } else {
-            res.json({'alert': 'Registration success'});
+            req.flash('signupMessage', 'That email is already taken.');
         }
+        passport.authenticate('local')(req, res, function () {
+            res.json(user, {'message': 'Registration success'});
+        });
     });
+
+
 });
 
-router.get('/auth/logout', function (req, res) {
-    console.log('logout');
+router.get('/logout', function (req, res) {
     req.logout();
     res.send(200);
 });

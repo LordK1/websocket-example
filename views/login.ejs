@@ -3,6 +3,14 @@
 <html>
 <head>
     <% include partials/header %>
+
+    <script>
+        <% if (message) { %>
+
+        var message = <%- JSON.stringify( message ) %>;
+        console.log(message.error);
+        <% } %>
+    </script>
 </head>
 
 
@@ -15,8 +23,8 @@
         <div class="col-md-12">
             <form action="/login" method="post">
                 <!-- show any messages that come back with authentication -->
-                <% if (message.length > 0) { %>
-                <div class="alert alert-danger"><%= message %></div>
+                <% if (message.length > 0 ) { %>
+                <div class="alert alert-danger"><%= message.error %></div>
                 <% } %>
 
                 <fieldset class="form-group">

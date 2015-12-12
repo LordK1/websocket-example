@@ -40,30 +40,42 @@
         </div>
         <div class="col-md-4">
             <div class="well">
-                <h1>Look i'm a Sidebar for What ?!</h1>
+                <%if (user){%>
+                       <h3> Hi, <%= user.username %> !</h3>
+                <% } %>
+
+                <h5>
+                    <br>
+                    Users List:
+                    <ul id="user-list">
+
+                    </ul>
+                    Rooms list :
+                    <div id="rooms-list">
+
+                    </div>
+                </h5>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-8">
-                <h3>Latest Messages :</h3>
+                <h3>Conversion :</h3>
                 <hr>
-                <div id="messages">
+                <div id="conversation">
 
                 </div>
             </div>
             <div class="col-md-4">
-                <form onsubmit="return chatSendNewMessage(this);">
+                <!--<form onsubmit="return chatSendNewMessage(this);">-->
+                <form onsubmit="return false;">
 
-                    <div class="username">
-                        <input type="text" id="username" placeholder="Your User Name" value="Guest" required="">
-                    </div>
                     <div class="message-input">
-                        <textarea type="text" id="message" placeholder="Enter a Message" required=""
+                        <textarea type="text" id="data" placeholder="Enter a Message" required=""
                                   value=""></textarea>
                     </div>
-                    <input class="sendMessageButton" type="submit" name="submit" value="Send !">
+                    <input id="datasend" class="sendMessageButton" type="submit" name="submit" value="Send !">
 
                 </form>
             </div>

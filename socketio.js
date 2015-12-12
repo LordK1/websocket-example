@@ -5,6 +5,9 @@
 var config = require('./config');
 var mongoose = require('mongoose');
 var Post = mongoose.model('Post');
+var User = mongoose.model('User');
+var usernames = {};
+var rooms = ['room1', 'room2', 'room3'];
 
 var numUsers = 0;
 module.exports = function (server, io, sessionMiddleware) {
@@ -20,14 +23,26 @@ module.exports = function (server, io, sessionMiddleware) {
             numUsers++;
             var addedUser = true;
         }
-        //var address = socket.handshake.address;
         console.log(socket.request.method, socket.request.url);
+        // at first update list of posts and users maybe
         Post.find(function (err, posts) {
             //console.log('POSTS', posts);
             if (err) {
                 console.log('update-posts', err);
             } else {
                 io.sockets.emit("update-posts", posts);
+            }
+        });
+
+
+        User.find({'_id': {$ne: userName}}, function (err, users) {
+            if (err) {
+                console.log(err);
+                return false;
+            }
+            else {
+                //console.log(' ---------- users : ', users);
+                io.sockets.emit("update-users", users);
             }
         });
 
@@ -62,31 +77,13 @@ module.exports = function (server, io, sessionMiddleware) {
                     }
                 });
 
-
-            // this line just emit for connected socket client
-            //console.log("POST:>>> ", listOfPosts);
-
-            // this line just emit for all client those connected
-            //io.sockets.emit("new-post-result", {post: post});
-        });
-
-
-        socket.on("update-message", function (data) {
-            //console.info("update-message : "+data);
-            var message = listOfMessages.filter(function (message) {
-                return message.messageId == data.messageId;
-            })[0];
-
-            message.likedBy = data.likedBy;
-            io.sockets.emit("messages", listOfMessages);
         });
 
         /********   CHATS  ********/
-            // when the client emits 'new message', this listens and executes
-        socket.on('chat-send-message', function (data) {
-            //    tell the client to executed 'new message'
-            //console.log('chat-send-message : ', data);
-            io.sockets.emit('chat-update-messages', data);
+
+
+        socket.on('chat-send-message', function (id, msg) {
+            socket.broadcast.to(id).emit('my message', msg);
         });
 
         // when the client emits 'chat-add-user', this listens and executes
@@ -131,5 +128,51 @@ module.exports = function (server, io, sessionMiddleware) {
                 numUsers: numUsers
             });
         });
+
+
+        /** Chat Rooms */
+        socket.on('addUser', function (user) {
+            console.log('addUser', user.username);
+            socket.username = user.username;
+            socket.user_id = user._id;
+            socket.room = 'room1';
+            usernames[user] = user;
+            socket.join('room1');
+            socket.emit('updatechat', 'SERVER', 'you have connected to room1');
+            socket.broadcast.to('room1').emit('updatechat', 'SERVER', user.username + ' has connected to this room');
+            socket.emit('updaterooms', rooms, 'room1');
+        });
+
+        // when the client emits 'sendchat', this listens and executes
+        socket.on('sendchat', function (data) {
+            console.log('sendchat', data);
+            // we tell the client to execute 'updatechat' with 2 parameters
+            io.sockets.in(socket.room).emit('updatechat', socket.username, data);
+        });
+
+        socket.on('switchRoom', function (newroom) {
+            console.log('switchRoom', newroom);
+            socket.leave(socket.room);
+            socket.join(newroom);
+            socket.emit('updatechat', 'SERVER', 'you have connected to ' + newroom);
+            // sent message to OLD room
+            socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username + ' has left this room');
+            // update socket session room title
+            socket.room = newroom;
+            socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username + ' has joined this room');
+            socket.emit('updaterooms', rooms, newroom);
+        });
+        // when the user disconnects.. perform this
+        socket.on('disconnect', function () {
+            console.log('disconnect !!!');
+            // remove the username from global usernames list
+            delete usernames[socket.username];
+            // update list of users in chat, client-side
+            io.sockets.emit('updateusers', usernames);
+            // echo globally that this client has left
+            socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
+            socket.leave(socket.room);
+        });
+
     });
 }

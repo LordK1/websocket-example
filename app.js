@@ -64,7 +64,7 @@ var auth = require('./routes/auth');
 app.use('/', auth);
 
 var api = require('./routes/api');
-app.use('/', api);
+app.use('/api', api);
 
 
 // serve statics as express statics

@@ -29,19 +29,19 @@ router.post('/register', function (req, res) {
             });
         }
         passport.authenticate('local')(req, res, function () {
-            res.redirect('/')
+            res.redirect('/');
         });
     });
 });
 
 router.get('/login', function (req, res) {
-    res.render('login', {title: "LOGIN", message: req.flash('failureFlash')});
+    res.render('login', {title: "LOGIN", message: req.flash()});
 });
 
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login',
-    failureFlash: true,
+    failureFlash: "Username or Password is invalid :'D ",
     successFlash: "Login Successful ! "
 }), function (req, res) {
     res.redirect('/');

@@ -15,7 +15,6 @@ router.use(function (req, res, next) {
 
 
 router.get('/', function (req, res) {
-    //res.set('Content-Type', 'application/javascript');
     res.render('home', {
         title: 'Home'
     });
@@ -23,10 +22,8 @@ router.get('/', function (req, res) {
 
 // Chat page
 router.get('/chat', function (req, res) {
-    var users = User.find();
     res.render('chat', {
-        title: 'Chat',
-        users: users
+        title: 'Chat'
     });
 });
 
