@@ -37,7 +37,7 @@ function render(data) {
         + data.content
         + '</p>'
         + '<div class="time"><span class="glyphicon-time"></span>'
-        + moment(data.created_date).fromNow()
+        + moment(data.created_at).fromNow()
         + '</div>'
         + '<input type="submit" class="like-count" value="' + data.likes + ' Likes"  >'
         + '</form>'

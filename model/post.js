@@ -8,8 +8,8 @@ var postSchema = new Schema({
     link: String,
     content: String,
     user_id: {type: Schema.Types.ObjectId, ref: 'User'},
-    created_date: Date,
-    updated_date: Date,
+    created_at: Date,
+    updated_at: Date,
     likes: Number
 });
 

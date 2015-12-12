@@ -22,19 +22,18 @@ module.exports = function (server, io, sessionMiddleware) {
         }
         //var address = socket.handshake.address;
         console.log(socket.request.method, socket.request.url);
-        socket.emit("test", "Helllo this is test !!!");
-
-
-        /********   POSTS  ********/
-        // Update list of Posts at first
-        var listOfPosts = Post.find(function (err, posts) {
+        Post.find(function (err, posts) {
             //console.log('POSTS', posts);
             if (err) {
-                listOfPosts = null;
+                console.log('update-posts', err);
             } else {
                 io.sockets.emit("update-posts", posts);
             }
         });
+
+        /********   POSTS  ********/
+            // Update list of Posts at first
+
 
         socket.on('new-post', function (data) {
             console.log('new-post : ' + data
@@ -52,6 +51,14 @@ module.exports = function (server, io, sessionMiddleware) {
                         console.log('err', err);
                     } else {
                         console.log(post + " created successfully !!");
+                        Post.find(function (err, posts) {
+                            //console.log('POSTS', posts);
+                            if (err) {
+                                console.log('update-posts', err);
+                            } else {
+                                io.sockets.emit("update-posts", posts);
+                            }
+                        });
                     }
                 });
 
@@ -62,6 +69,7 @@ module.exports = function (server, io, sessionMiddleware) {
             // this line just emit for all client those connected
             //io.sockets.emit("new-post-result", {post: post});
         });
+
 
         socket.on("update-message", function (data) {
             //console.info("update-message : "+data);
