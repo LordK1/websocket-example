@@ -1,42 +1,45 @@
 /**
  * Created by k1 on 12/6/15.
  */
-var messageCache;
-
-function randomId() {
-    return Math.floor(Math.random() * 1e11);
-}
-
-var socket = io.connect({
-    'forceNew': true
-});
+/*var socket = io.connect({
+ 'forceNew': true
+ });*/
+var socket = io.connect(window.location.hostname + ":" + window.location.port, {
+        'forceNew': true
+    }
+);
 socket.on('test', function (data) {
-    console.log(data + " session : " + socket.toString());
+    console.log(data + " session : " + socket.request);
+});
+var listOfPosts = [];
+socket.on('new-post-result', function (data) {
+    render(data);
 });
 
-socket.on("messages", function (data) {
-    messageCache = data;
-    render();
+socket.on('update-posts',function(data){
+    console.log("posts ", data, " listOfPosts.length : ", listOfPosts.length);
+    listOfPosts.push(data);
+    render(data);
 });
 
-
-function render() {
-    var data = messageCache;
+function render(data) {
     var html = data.sort(function (a, b) {
-        return a.ts - b.ts;
+        return a.created_date - b.created_date;
     }).map(function (data, index) {
         return (
         '<form class="name" onsubmit="return likeMessage(messageCache[' + index + ']);">'
         + '<div class="name">'
-        + data.userName
+        + data.user
+        + '<br>'
+        + data.link
         + '</div>'
-        + '<a class="content-link" href=' + data.content.link + ' target=blank>'
-        + data.content.text
-        + '</a>'
+        + '<p class="content-link" >'
+        + data.content
+        + '</p>'
         + '<div class="time"><span class="glyphicon-time"></span>'
-        + moment(data.ts).fromNow()
+        + moment(data.created_date).fromNow()
         + '</div>'
-        + '<input type="submit" class="like-count" value="' + data.likedBy.length + ' Likes"  >'
+        + '<input type="submit" class="like-count" value="' + data.likes + ' Likes"  >'
         + '</form>'
         )
     }).join("");
@@ -60,14 +63,18 @@ function likeMessage(message) {
 
 function createPost(e) {
     if (user) {
-        var receivedPost =
+        var post =
         {
-            link: document.getElementsByName("link").value,
+            link: document.getElementById("link").value,
             content: document.getElementById("content").value,
-            likeCount: 0
+            likeCount: 0,
+            user_id: user._id
         }
-        socket.emit("new-message", payload);
+        console.info("post : ", post);
+        socket.emit("new-post", post);
         return false;
+    } else {
+        alert('OOPPs R U kidding me, first login !!!');
     }
 
 }

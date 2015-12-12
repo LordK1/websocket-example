@@ -3,35 +3,32 @@
  */
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
+var Post = mongoose.model('Post');
 
 router.use(function (req, res, next) {
-    console.log(req.method, req.DB_URL,req.session.passport.user);
+    console.log(req.method, req.url, req.session.passport);
+    res.locals.isAuthenticated = req.isAuthenticated()
     res.locals.user = req.user;
     next();
 });
 
+
 router.get('/', function (req, res) {
-    var drinks = [
-        {name: 'Bloody Mary', drunkness: 3},
-        {name: 'Martini', drunkness: 5},
-        {name: 'Scotch', drunkness: 7}
-    ];
-    var tagline = "Any Code of your own that you haven't looked at for six or more months might as well have been written by someone else !!! "
+    //res.set('Content-Type', 'application/javascript');
     res.render('home', {
-        title: 'Home',
-        drinks: drinks,
-        tagline: tagline
+        title: 'Home'
     });
 });
 
 // Chat page
 router.get('/chat', function (req, res) {
+    var users = User.find();
     res.render('chat', {
-        title: 'Chat'
+        title: 'Chat',
+        users: users
     });
 });
-
-
 
 
 module.exports = router;

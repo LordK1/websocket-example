@@ -7,6 +7,13 @@ var mongoose = require('mongoose');
 var Message = mongoose.model('Message');
 var User = mongoose.model('User');
 var Post = mongoose.model('Post');
+var passport = require('passport');
+
+function isAuthenticated(req, res, next) {
+    if (req.isAuthenticated())return next();
+    res.send(401);
+}
+
 
 router.get('/users', function (req, res) {
     User.find(function (err, users) {
@@ -42,6 +49,35 @@ router.get('/posts/:userId', function (req, res) {
             res.send(posts);
         });
     });
+});
+
+router.post('/auth/login', passport.authenticate('local'), function (req, res) {
+    res.json(req.user);
+});
+
+router.get('/auth/currentuser', isAuthenticated, function (req, res) {
+    res.json(req.user);
+});
+
+router.post('/auth/register', function (req, res) {
+
+    var user = new User();
+    user.username = req.body.username;
+    user.password = req.body.password;
+
+    user.save(function (err) {
+        if (err) {
+            res.json({'alert': 'Registration error'});
+        } else {
+            res.json({'alert': 'Registration success'});
+        }
+    });
+});
+
+router.get('/auth/logout', function (req, res) {
+    console.log('logout');
+    req.logout();
+    res.send(200);
 });
 
 

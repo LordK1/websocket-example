@@ -3,6 +3,15 @@
 <html>
 <head>
     <% include partials/header %>
+    <script type="text/javascript">
+        var user;
+        <% if (user){ %>
+        user = <%- JSON.stringify(user) %>;
+
+        console.log(user.username);
+        <% } %>
+
+    </script>
     <script type="text/javascript" src="static/js/chat.js"></script>
 </head>
 <body class="container">

@@ -33,7 +33,7 @@ function render() {
 
 function chatSendNewMessage(e) {
     var playLoad = {
-        username: document.getElementById("username").value,
+        username: user,
         message: document.getElementById("message").value,
         ts: Date.now()
     }

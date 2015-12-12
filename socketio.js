@@ -3,13 +3,10 @@
  * Created by k1 on 12/11/15.
  */
 var config = require('./config');
-var cookieParser = require('cookie-parser');
-var passportSocketIo = require('passport.socketio');
+var mongoose = require('mongoose');
+var Post = mongoose.model('Post');
 
-// username which are currently connected to the chat
 var numUsers = 0;
-
-
 module.exports = function (server, io, sessionMiddleware) {
 
     io.use(function (socket, next) {
@@ -17,21 +14,53 @@ module.exports = function (server, io, sessionMiddleware) {
     })
 
     io.on('connection', function (socket) {
-        var userId = socket.request.session.passport.user;
-        console.log("Connection for userId : ", userId);
+        if (socket.request.session.passport) {
+            var userName = socket.request.session.passport.user;
+            console.log("Connection for passport username : ", userName);
+            numUsers++;
+            var addedUser = true;
+        }
         //var address = socket.handshake.address;
-        console.log(socket.request.method, socket.request.DB_URL,socket.request.headers.cookie);
+        console.log(socket.request.method, socket.request.url);
         socket.emit("test", "Helllo this is test !!!");
-        var addedUser = false;
-        socket.on('new-message', function (data) {
-            console.log('new-message username : ' + data.userName
-            + " content : " + data.content.link
-            + " text : " + data.content.text);
-            listOfMessages.push(data);
+
+
+        /********   POSTS  ********/
+        // Update list of Posts at first
+        var listOfPosts = Post.find(function (err, posts) {
+            //console.log('POSTS', posts);
+            if (err) {
+                listOfPosts = null;
+            } else {
+                io.sockets.emit("update-posts", posts);
+            }
+        });
+
+        socket.on('new-post', function (data) {
+            console.log('new-post : ' + data
+                + " link : " + data.link
+                + " user_id : " + data.user_id,
+                +" content : " + data.content);
+
+            new Post({
+                link: data.link,
+                content: data.content,
+                user_id: socket.request.session.passport.user,
+                likes: data.likeCount
+            }).save(function (err, post) {
+                    if (err) {
+                        console.log('err', err);
+                    } else {
+                        console.log(post + " created successfully !!");
+                    }
+                });
+
+
             // this line just emit for connected socket client
-            //socket.emit("messages", listOfMessages);
+            //console.log("POST:>>> ", listOfPosts);
+
             // this line just emit for all client those connected
-            io.sockets.emit("messages", listOfMessages);
+            //io.sockets.emit("new-post-result", {post: post});
         });
 
         socket.on("update-message", function (data) {
@@ -44,7 +73,8 @@ module.exports = function (server, io, sessionMiddleware) {
             io.sockets.emit("messages", listOfMessages);
         });
 
-        // when the client emits 'new message', this listens and executes
+        /********   CHATS  ********/
+            // when the client emits 'new message', this listens and executes
         socket.on('chat-send-message', function (data) {
             //    tell the client to executed 'new message'
             //console.log('chat-send-message : ', data);
@@ -84,7 +114,7 @@ module.exports = function (server, io, sessionMiddleware) {
         socket.on('disconnect', function () {
             //    remove the username from global username list
             if (addedUser) {
-                delete usernames[socket.username];
+                //delete usernames[socket.username];
                 --numUsers;
             }
             // echo globally tha this user left
