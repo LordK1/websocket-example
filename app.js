@@ -37,7 +37,7 @@ app.use(flash());
 app.set('port', (process.env.PORT || 3000));
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-//require('./socketio')(server, io, sessionMiddleware);
+require('./socketio')(server, io, sessionMiddleware);
 
 
 server.listen(app.get('port'), function () {

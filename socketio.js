@@ -12,14 +12,14 @@ var rooms = ['room1', 'room2', 'room3'];
 var numUsers = 0;
 module.exports = function (server, io, sessionMiddleware) {
 
-    io.use(function (socket, next) {
+    /*io.use(function (socket, next) {
         sessionMiddleware(socket.request, {}, next);
-    })
+    });*/
 
     io.on('connection', function (socket) {
         if (socket.request.session.passport) {
             var userName = socket.request.session.passport.user;
-            console.log("Connection for passport username : ", userName);
+            //console.log("Connection for passport username : ", userName);
             numUsers++;
             var addedUser = true;
         }
