@@ -7,7 +7,7 @@ var socket = io.connect(window.location.hostname + ":" + window.location.port, {
 );
 
 socket.on('connect', function () {
-    socket.emit('addUser', alert(user));
+    //socket.emit('addUser', alert(user));
     if (user) {
         socket.emit('addUser', user);
     } else {
